@@ -1,0 +1,20 @@
+package com.wipro.bank.main;
+
+import java.sql.SQLException;
+
+import com.wipro.bank.bean.TransferBean;
+import com.wipro.bank.service.BankService;
+import com.wipro.bank.util.INsufficientFundsException;
+
+public class BankMain {
+	public static void main(String[] args) throws INsufficientFundsException, SQLException {
+		BankService bankService=new BankService();
+		System.out.println(bankService.checkBalance("717823331"));  
+		TransferBean transferBean = new TransferBean();	
+		transferBean.setFromAccountNumber("717823331");
+		transferBean.setToAccountNumber("717823333");
+		transferBean.setDateOfTransactionID(new java.util.Date());	
+		transferBean.setAmount(1550);		 
+		System.out.println(bankService.transfer(transferBean));
+		}
+}

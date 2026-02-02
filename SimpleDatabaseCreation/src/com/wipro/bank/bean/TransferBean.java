@@ -1,0 +1,41 @@
+package com.wipro.bank.bean;
+import java.util.Date;
+public class TransferBean {
+     private int transactionID;
+     private String fromAccountNumber;
+     private String toAccountNumber;
+     private Date DateOfTransactionID;
+     private float Amount;
+     
+
+	public int getTransactionID() {
+		return transactionID;
+	}
+	public void setTransactionID(int transactionID) {
+		this.transactionID = transactionID;
+	}
+	public String getFromAccountNumber() {
+		return fromAccountNumber;
+	}
+	public void setFromAccountNumber(String fromAccountNumber) {
+		this.fromAccountNumber = fromAccountNumber;
+	}
+	public String getToAccountNumber() {
+		return toAccountNumber;
+	}
+	public void setToAccountNumber(String toAccountNumber) {
+		this.toAccountNumber = toAccountNumber;
+	}
+	public Date getDateOfTransactionID() {
+		return DateOfTransactionID;
+	}
+	public void setDateOfTransactionID(Date dateOfTransactionID) {
+		DateOfTransactionID = dateOfTransactionID;
+	}
+	public float getAmount() {
+		return Amount;
+	}
+	public void setAmount(float amount) {
+		Amount = amount;
+	}
+}

@@ -1,0 +1,18 @@
+package com.wipro.bank.service;
+
+import com.wipro.bank.dao.BankDAO;
+
+public class BankService {
+public String checkBalance(String accountNumber) {
+	BankDAO d = new BankDAO();
+
+    if (!d.validateAccount(accountNumber)) {
+        return "ACCOUNT NUMBER INVALID";
+    }
+
+    float balance = d.findBalance(accountNumber);
+
+    return "BALANCE is : " + balance;
+}
+
+}

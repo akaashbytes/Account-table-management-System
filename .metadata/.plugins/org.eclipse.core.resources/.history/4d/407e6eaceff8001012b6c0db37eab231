@@ -1,0 +1,43 @@
+package com.wipro.bank.dao;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import com.wipro.bank.util.DButil;
+
+public class BankDAO {
+    public int generateSequenceNumber() {
+    	return 0;
+    }
+    public boolean validateAccount(String AccountNumber) throws SQLException{
+    	Connection connection=DButil.getDBConnection();
+    	
+    	String query = "select Account_Number from Account_tbl where Account_Number=?" ;
+    	
+    	PreparedStatement ps= connection.prepareStatement(query);
+    	ps.setString(1,AccountNumber);
+    	ResultSet rs= ps.executeQuery();
+    	
+    	if(rs.next()) {
+    		return true;
+    		}
+    	   return false;
+    }
+
+    public float findBalance(String accountNumber) throws Exception {
+        if(validateAccount(accountNumber)) {
+        Connection con =  DButil.getDBConnection();
+        
+        String query  = "select Balance from account_tbl where Account_Number = ? ";
+
+       PreparedStatement ps = con.prepareStatement(query);
+       ps.setString(1,accountNumber);
+       ResultSet rs = ps.executeQuery();
+       
+       return rs.getFloat(1);
+       }else {
+       return -1;
+    }
+  }
+}

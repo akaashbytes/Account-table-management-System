@@ -1,0 +1,12 @@
+package com.wipro.bank.dao;
+
+import com.wipro.bank.util.DButil;
+
+public class BankDAO {
+    public int generateSequenceNumber() {
+    	return 0;
+    }
+    public boolean validatrAccount(String AccountNumber) {
+    	Connection connection=DButil.getDBConnection();
+    }
+}

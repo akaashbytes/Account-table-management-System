@@ -1,0 +1,52 @@
+package com.wipro.bank.service;
+
+import com.wipro.bank.bean.TransferBean;
+import com.wipro.bank.dao.BankDAO;
+import com.wipro.bank.util.INsufficientFundsException;
+
+public class BankService {
+
+    BankDAO obj = new BankDAO();
+
+    public String checkBalance(String accountNumber) {
+        boolean valid = obj.validateAccount(accountNumber);
+        if (valid) {
+            float balance = obj.findBalance(accountNumber);
+            return "BALANCE : " + balance;
+        }
+        return "ACCOUNT NUMBER INVALID";
+    }
+
+    public String transfer(TransferBean transferBean) throws INsufficientFundsException {
+
+        if (transferBean == null) {
+            return "INVALID";
+        }
+
+        String fromACC = transferBean.getFromAccountNumber();
+        String toACC = transferBean.getFromAccountNumber();
+
+        boolean fromValid = obj.validateAccount(fromACC);
+        boolean toValid = obj.validateAccount(toACC);
+
+        if (!fromValid || !toValid) {
+            return "INVALID ACCOUNT";	
+        }
+
+        float balance = obj.findBalance(fromACC);
+
+        if (balance >= transferBean.getAmount()) {
+
+            float fromBalance = balance - transferBean.getAmount();
+            float toBalance = obj.findBalance(toACC) + transferBean.getAmount();
+
+            obj.updateBalance(fromACC, fromBalance);
+            obj.updateBalance(toACC, toBalance);
+            obj.transferMoney(transferBean);
+
+            return "SUCCESS";
+        }
+
+        throw new INsufficientFundsException();
+    }
+}

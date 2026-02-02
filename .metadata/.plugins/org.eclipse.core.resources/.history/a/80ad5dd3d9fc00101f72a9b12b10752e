@@ -1,0 +1,59 @@
+package com.wipro.bank.dao;
+import java.sql.Connection;
+import java.sql.Date;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import com.wipro.bank.bean.TransferBean;
+import com.wipro.bank.util.DButil;
+
+
+public class BankDAO {
+
+    // ✅ Validate account
+    public boolean validateAccount(String accNo) {
+        try (Connection con = DButil.getDBConnection();
+             PreparedStatement ps =
+                 con.prepareStatement("SELECT 1 FROM ACCOUNT_TBL WHERE Account_Number = ?")) {
+
+            ps.setString(1, accNo);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    // ✅ Get balance
+    public double getBalance(String accNo) {
+        try (Connection con = DButil.getDBConnection();
+             PreparedStatement ps =
+                 con.prepareStatement("SELECT Balance FROM ACCOUNT_TBL WHERE Account_Number = ?")) {
+
+            ps.setString(1, accNo);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next())
+                return rs.getDouble(1);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    // ✅ Update balance (FIXED ORA-17041)
+    public boolean updateBalance(Connection con, String accNo, double newBalance) throws Exception {
+
+        PreparedStatement ps =
+            con.prepareStatement("UPDATE ACCOUNT_TBL SET Balance = ? WHERE Account_Number = ?");
+
+        ps.setDouble(1, newBalance);     // 1st ?
+        ps.setString(2, accNo);          // 2nd ?  ✅
+
+        return ps.executeUpdate() > 0;
+    }
+}

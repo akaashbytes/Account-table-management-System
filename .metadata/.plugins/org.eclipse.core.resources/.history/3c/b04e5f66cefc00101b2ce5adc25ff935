@@ -1,0 +1,18 @@
+package com.wipro.bank.service;
+import com.wipro.bank.bean.TransferBean;
+import com.wipro.bank.util.INsufficientFundsException;
+import com.wipro.bank.dao.BankDAO;
+public class BankService {
+	BankDAO obj=new BankDAO();
+	public String checkBalance(String accountNumber)
+	{
+		boolean valid=obj.validateAccount(accountNumber);
+		if(valid)
+		{
+			float balance=obj.findBalance(accountNumber);
+			return "BALANCE:"+balance;
+			
+		}
+		return "ACCOUNT NUMBER INVALID";
+		}
+}

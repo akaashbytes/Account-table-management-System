@@ -1,0 +1,84 @@
+package com.wipro.bank.dao;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import com.wipro.bank.util.DButil;
+
+public class BankDAO {
+    public int generateSequenceNumber() {
+    	return 0;
+    }
+    public boolean validateAccount(String AccountNumber) throws SQLException{
+    	Connection connection=DButil.getDBConnection();
+    	String query = "select * from Account_tbl where Account_Number=?" ;
+    	
+    	try {
+    	PreparedStatement ps= connection.prepareStatement(query);
+    	ps.setString(1,AccountNumber);
+    	ResultSet rs= ps.executeQuery();
+    	
+    	if(rs.next()) {
+        	return true;
+    		}
+    	    return false;
+        }  catch (SQLException e) {
+    	  e.printStackTrace();
+    	  return false;
+       }
+    }
+    public float findBalance( String AccountNumber) throws SQLException{
+    	if(validateAccount( AccountNumber)) {
+    		Connection connection = DButil.getDBConnection();
+    		String query = " select balance from Account_tbl where Account_Number=? ";
+    		
+    		try {
+    			PreparedStatement ps =connection.prepareStatement(query);
+    			ps.setString(1, AccountNumber);
+    			ResultSet rs = ps.executeQuery();
+    			rs.next ();
+       		    float balance = rs.getFloat(1);
+                return balance;
+                
+    		}catch (SQLException e) {
+    			e.printStackTrace();
+    		}
+    		
+            }
+             return -1;
+
+    }
+    public boolean updateBalance(String AccountNumber, float newBalance) throws SQLException{
+    	Connection connection = DButil.getDBConnection();
+    	String query="update Account_tbl set balance= ? where Account_Number=?";
+    	
+    	try {
+    		PreparedStatement ps =connection.prepareStatement(query);
+			ps.setString(1, AccountNumber);
+			ps.setFloat(1, newBalance);
+			ResultSet rs = ps.executeQuery();
+			if(rs.next()) {
+	        	return true;
+	    		}
+	    	    return false;
+
+    	}catch (SQLException e) {
+    		e.printStackTrace();
+    	}
+    	return false;
+     }
+     public int generateSequenceNumber1(){
+     Connection connection =DButil.getDBConnection();
+     String query="select transactionID_seq.NEXTVAL from dual";
+     try {
+    	 PreparedStatement ps =connection.prepareStatement(query);
+			ResultSet rs = ps.executeQuery();
+			rs.next ();
+			int seqNumber=rs.getInt(1);
+			return seqNumber;
+     }catch (SQLException e) {
+    	 e.printStackTrace();
+    		return 0;
+     }
+}
+}
